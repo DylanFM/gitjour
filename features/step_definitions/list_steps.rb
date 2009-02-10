@@ -17,7 +17,7 @@ When /^I run gitjour list$/ do
   When "I capture stdout"
   Gitjour::Application.run "list"
   @output = @new_stdout.string
-  When "I put stdout back"
+  Then "I put stdout back"
   # Build some regular expressions
   # "Gathering for up to 5 seconds..."
   intro_line = /^[\w\s]+(\d+\s\w+)\.{3}/
@@ -27,12 +27,11 @@ When /^I run gitjour list$/ do
   service_pattern = /^\s+([\w\-]+)\s(git:\/\/[\w\d\.-]+(\/|\:\d+\/))/ 
   # "2 repositories shown."
   number_shown_pattern = /^(\d+)\s\w+\s\w+\./
+  # Let's make sure there are the same amount of services in the output as there are in @repositories
+  list_num_services, num_services = 0, 0
+  @repositories.each_value { |services| num_services += services.size }
   # Build a hash like @repositories so we can test list's output easier
   @list_repositories = Hash.new
-  # Let's make sure there are the same amount of services in the output as there are in @repositories
-  num_services = 0
-  @repositories.each_value { |services| num_services += services.size }
-  list_num_services = 0
   # Now let's process the list output
   @output.split('\n')
   @output.each do |line|
