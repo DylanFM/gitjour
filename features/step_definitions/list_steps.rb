@@ -1,7 +1,5 @@
 Before do
   service_list = Gitjour::Application.send(:service_list).to_a #So we know what we're looking for in the output
-  Gitjour::Application.instance_eval { remove_instance_variable :@list } #So the list isn't cached
-  #I'm testing with local repos, so the results aren't going to change between steps
   #Build a more convenient hash of repos => services
   @repositories = service_list.inject({}) do |repos,service| 
     repo = service.repository.to_sym
